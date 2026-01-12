@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#dc3545">
+  <title>QC Inspection Report</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  
+  <!-- App Header -->
+  <header class="app-header">
+    <h1>India QC Team - Inspection Report</h1>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="showReportsList()">📋 My Reports</button>
+      <button class="btn btn-primary" onclick="createNewReport()">+ New Report</button>
+    </div>
+  </header>
+
+  <!-- Reports List View -->
+  <div id="reportsListView" class="view-container" style="display:none;">
+    <div class="view-header">
+      <h2>Saved Reports</h2>
+      <button class="btn btn-secondary" onclick="hideReportsList()">Back</button>
+    </div>
+    <div id="reportsList" class="reports-list"></div>
+  </div>
+
+  <!-- Main Report View -->
+  <div id="reportView" class="view-container">
+    
+    <!-- Report Actions Bar -->
+    <div class="action-bar">
+      <button class="btn btn-success" onclick="saveReport()">💾 Save Report</button>
+      <button class="btn btn-info" onclick="exportToPDF()">📄 Export PDF</button>
+      <button class="btn btn-info" onclick="exportToWord()">📝 Export Word</button>
+      <button class="btn btn-secondary" onclick="showReportsList()">All Reports</button>
+    </div>
+
+    <!-- Inspection Report Form -->
+    <div id="inspectionReport" class="report-container">
+      
+      <!-- Page 1: Product Description -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+          <div class="header-center"><strong>Inspection Report ( PSI )</strong></div>
+          <div class="header-right">PO# <input type="text" id="poNumber" class="input-inline" placeholder="I-1173-25"></div>
+        </div>
+
+        <div class="section-title red-bg">PRODUCT DESCRIPTION</div>
+        
+        <div class="content-grid">
+          <div class="product-images">
+            <div id="images-product-main" class="image-grid">
+              <!-- Product images will be added here -->
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('product-main')">📷 Add Photo</button>
+            <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('product-main')">📁 Upload</button>
+          </div>
+          
+          <div class="product-info-table">
+            <table class="info-table">
+              <tr>
+                <td class="label-cell">Client</td>
+                <td><input type="text" id="client" value=""></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Product Name</td>
+                <td><input type="text" id="productName" value="M/A"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Importer</td>
+                <td><input type="text" id="importer" value="FRIUPOK"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Location</td>
+                <td><input type="text" id="location" value="100%COTTON JERSEY"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Instruction</td>
+                <td><input type="text" id="instruction" value="200GSM"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Style No.</td>
+                <td><input type="text" id="styleNo" value="1323"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Inspection date</td>
+                <td><input type="date" id="inspectionDate"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">P/O Number</td>
+                <td><input type="text" id="poNumberDetail" value="I-1173-25"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Cartons Inspected</td>
+                <td><input type="text" id="cartonsInspected" value="RANDOM TEST PASS"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Order quantity</td>
+                <td><input type="number" id="orderQuantity" value="16500"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Quantity for Inspection</td>
+                <td><input type="number" id="quantityInspection" value="16500"></td>
+              </tr>
+              <tr>
+                <td class="label-cell">Inspection</td>
+                <td><input type="text" id="inspection" value=""></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-title red-bg">INSPECTION STANDARDS</div>
+        
+        <table class="standards-table">
+          <tr>
+            <td class="label-cell">Inspection type</td>
+            <td colspan="3"><input type="text" id="inspectionType" value="Pre-shipment Inspection"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Sampling standard</td>
+            <td colspan="3"><input type="text" id="samplingStandard" value="ISO 2859-1 (Std 105 E)"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Sampling level</td>
+            <td colspan="3"><input type="text" id="samplingLevel" value="General Level II"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">AQL for Critical defect</td>
+            <td><input type="text" id="aqlCritical" value="0.0"></td>
+            <td class="label-cell">Critical checked</td>
+            <td><input type="text" id="criticalChecked" value="N/A"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">AQL for Major defective</td>
+            <td><input type="text" id="aqlMajor" value="2.5"></td>
+            <td class="label-cell">Major checked</td>
+            <td><input type="text" id="majorChecked" value="N/A"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">AQL for Minor defective</td>
+            <td><input type="text" id="aqlMinor" value="4.0"></td>
+            <td class="label-cell">Minor checked</td>
+            <td><input type="text" id="minorChecked" value="N/A"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Sampling plan & criteria for inspection</td>
+            <td colspan="3"><input type="text" id="samplingPlan" value="YES/NO"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Prior quantity & criteria for shipment</td>
+            <td colspan="3"><input type="text" id="priorQuantity" value="ISO 2859/1x or Next"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Quantity & cartons available for inspection</td>
+            <td colspan="3"><input type="text" id="quantityCartons" value="16500"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">No. of cartons inspected</td>
+            <td colspan="3"><input type="text" id="cartonsInspectedCount" value="54"></td>
+          </tr>
+        </table>
+
+        <div class="page-footer">Page 1</div>
+      </div>
+
+      <!-- Page 2: Inspection Results -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+          <div class="header-right"></div>
+        </div>
+
+        <div class="decision-buttons">
+          <button class="btn-approve">Approve</button>
+          <button class="btn-reject">Reject</button>
+        </div>
+
+        <div class="overall-result">
+          <div class="result-label">OVERALL INSPECTION RESULT:</div>
+          <div class="result-value"><input type="text" id="overallResult" value="Approve"></div>
+        </div>
+
+        <div class="section-title red-bg">INSPECTION RESULT SUMMARY</div>
+
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th rowspan="2">Result</th>
+              <th colspan="3">Findings/Remarks</th>
+            </tr>
+            <tr>
+              <th>CRITICAL</th>
+              <th>MAJOR</th>
+              <th>MINOR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>WORKMANSHIP<br>(Defective Unit)</strong></td>
+              <td><input type="text" id="workmanshipCritical" value="0"></td>
+              <td><input type="text" id="workmanshipMajor" value=""></td>
+              <td><input type="text" id="workmanshipMinor" value=""></td>
+            </tr>
+            <tr>
+              <td class="over-aql-cell">Over AQL</td>
+              <td><input type="text" id="overAqlCritical" value=""></td>
+              <td><input type="text" id="overAqlMajor" value=""></td>
+              <td><input type="text" id="overAqlMinor" value=""></td>
+            </tr>
+            <tr>
+              <td>Miss</td>
+              <td><input type="text" id="missCritical" value=""></td>
+              <td><input type="text" id="missMajor" value=""></td>
+              <td><input type="text" id="missMinor" value=""></td>
+            </tr>
+            <tr>
+              <td>Checked</td>
+              <td><input type="text" id="checkedCritical" value="0"></td>
+              <td><input type="text" id="checkedMajor" value=""></td>
+              <td><input type="text" id="checkedMinor" value=""></td>
+            </tr>
+            <tr>
+              <td colspan="4" class="note-cell">
+                <div><strong>Above average defects found on average defects found.</strong></div>
+                <textarea id="defectNotes" rows="2" style="width:100%;"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="defect-table">
+          <tr>
+            <td class="label-cell">DEFECT Grade</td>
+            <td class="label-cell">DEFECT QTY</td>
+            <td class="label-cell">Defect Description (Defect picture refer to references list)</td>
+          </tr>
+          <tr><td>MAJOR</td><td><input type="number" id="major1Qty" value="1"></td><td><input type="text" id="major1Desc" value="holes"></td></tr>
+          <tr><td>MAJOR</td><td><input type="number" id="major2Qty" value="1"></td><td><input type="text" id="major2Desc" value="stain"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor1Qty" value="1"></td><td><input type="text" id="minor1Desc" value="Open seam?"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor2Qty" value="2"></td><td><input type="text" id="minor2Desc" value="Seam puckering"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor3Qty" value="1"></td><td><input type="text" id="minor3Desc" value="Dirt"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor4Qty" value="1"></td><td><input type="text" id="minor4Desc" value="Shaded"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor5Qty" value="1"></td><td><input type="text" id="minor5Desc" value="Fabric out"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor6Qty" value="1"></td><td><input type="text" id="minor6Desc" value="Un stitched thread"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor7Qty" value="1"></td><td><input type="text" id="minor7Desc" value="Loose thread"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor8Qty" value="1"></td><td><input type="text" id="minor8Desc" value="close edge"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor9Qty" value="1"></td><td><input type="text" id="minor9Desc" value="Loose seam S"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor10Qty" value="1"></td><td><input type="text" id="minor10Desc" value="Skipped stitch"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor11Qty" value="1"></td><td><input type="text" id="minor11Desc" value="Repair of stitch"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor12Qty" value="1"></td><td><input type="text" id="minor12Desc" value="Out of tolerance"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" id="minor13Qty" value="1"></td><td><input type="text" id="minor13Desc" value="Print peeling"></td></tr>
+        </table>
+
+        <button class="btn btn-sm btn-success" onclick="addDefectRow()">+ Add Defect Row</button>
+
+        <div class="page-footer">Page 2</div>
+      </div>
+
+      <!-- Page 3: Quality Criteria -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <table class="quality-table">
+          <tr><td>MINOR</td><td><input type="number" value="1"></td><td><input type="text" value="Label size incorrect"></td></tr>
+          <tr><td>MINOR</td><td><input type="number" value=""></td><td><input type="text" value="Lable wrong placement"></td></tr>
+          <tr>
+            <td colspan="3" class="section-label">1. QUANTITY</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="label-cell">Expected Result</td>
+            <td class="label-cell">Result</td>
+          </tr>
+          <tr>
+            <td colspan="2">100% Goods ready for the inspection.</td>
+            <td><select id="quantityResult"><option>OK</option><option>Issue</option></select></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="section-label">2. PRODUCT COLOR & ARTWORK</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="label-cell">Expected Result</td>
+            <td class="label-cell">Actual Finding / Comments</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="section-label">3. PRODUCT DIMENSION & WEIGHT</td>
+          </tr>
+          <tr>
+            <td colspan="2"><select id="dimensionResult"><option>OK</option><option selected>See SEC</option></select></td>
+            <td><input type="text" id="dimensionComment" value="Refer to sizes"></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="section-label">4. PACKING/ACCESSORIES</td>
+          </tr>
+          <tr>
+            <td colspan="2"><select id="packingResult"><option>OK</option></select></td>
+            <td><input type="text" id="packingComment" value="PACKING FOLLOWED THE PROVIION CTN MARKS"></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="section-label">5. FOLDING METHOD</td>
+          </tr>
+          <tr>
+            <td colspan="2"><select id="foldingResult"><option>OK</option></select></td>
+            <td><input type="text" id="foldingComment" value="FACTORY FOLLOWED REQUIRED FOLDING METHOD FOR THIS ORDER"></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="section-label">6. CARE LABEL/PRICE TICKETS/CTN BARCODE</td>
+          </tr>
+          <tr>
+            <td colspan="2"><select id="labelResult"><option>OK</option></select></td>
+            <td><input type="text" id="labelComment" value="FACTORY FOLLOWED & ATTACHED APPROVED PRICE TICKET, CARE LABEL & P.HAND TAG."></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="section-label">7. CTN MEASUREMENT</td>
+          </tr>
+          <tr>
+            <td colspan="2"><select id="ctnMeasureResult"><option>OK</option></select></td>
+            <td><input type="text" id="ctnMeasureComment" value=""></td>
+          </tr>
+        </table>
+
+        <div class="section-title red-bg">OTHER REMARKS</div>
+        <textarea id="otherRemarks" rows="4" style="width:100%;"></textarea>
+
+        <div class="section-title red-bg">QUALITY CRITERIA</div>
+        <table class="quality-criteria-table">
+          <tr>
+            <td colspan="2">1. Quantity</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Result</td>
+          </tr>
+          <tr>
+            <td>100% Goods ready for the inspection.</td>
+            <td><select><option>OK</option></select></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="background:#ffff00;text-align:center;font-weight:bold;">backnglishf</td>
+          </tr>
+        </table>
+
+        <div class="page-footer">Page 3</div>
+      </div>
+
+      <!-- Page 4: Packing List & Pictures -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">Quantity of packed products:</div>
+        <table class="simple-table">
+          <tr>
+            <td class="label-cell">Quantity of packed products:</td>
+            <td><input type="text" id="packingQtyPacked" value="Goods are completely packed"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Quantity of finished & unpacked products:</td>
+            <td><input type="text" id="packingQtyFinished" value="Goods are completely packed"></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Quantity of semi-finished products:</td>
+            <td><input type="text" id="packingQtySemi" value="Goods are completely packed"></td>
+          </tr>
+        </table>
+
+        <div class="section-title">Pictures:</div>
+        <div id="images-packing-list" class="image-grid-large">
+          <!-- Images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('packing-list')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('packing-list')">📁 Upload</button>
+
+        <div class="page-footer">Page 4</div>
+      </div>
+
+      <!-- Page 5: Color/Design Logo -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">2. Colour/Design Logo</div>
+        
+        <table class="color-table">
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Revisions if Any</td>
+            <td class="label-cell">Comments</td>
+          </tr>
+          <tr>
+            <td>WHITE</td>
+            <td><select id="colorWhiteResult"><option>OK</option></select></td>
+            <td><input type="text" id="colorWhiteComment" value="FABRIC FOLLOW ASPER APPROVED"></td>
+          </tr>
+          <tr>
+            <td>BLACK</td>
+            <td><select id="colorBlackResult"><option>OK</option></select></td>
+            <td><input type="text" id="colorBlackComment" value="FABRIC FOLLOW ASPER APPROVED"></td>
+          </tr>
+        </table>
+
+        <div class="section-title">COLOURS</div>
+        
+        <div class="color-images">
+          <div id="images-colors" class="image-grid-2col">
+            <!-- Color images will be added here -->
+          </div>
+          <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('colors')">📷 Add Photo</button>
+          <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('colors')">📁 Upload</button>
+        </div>
+
+        <div class="section-title">3. Product dimensions</div>
+        <div class="section-title">4. Dimensions</div>
+        
+        <table class="dimensions-table">
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Result</td>
+            <td class="label-cell">Actual Finding / Comments</td>
+          </tr>
+          <tr><td>S</td><td><select id="dimSResult"><option>Ok</option></select></td><td><input type="text" id="dimSComment" value="Ok"></td></tr>
+          <tr><td>M</td><td><select id="dimMResult"><option>Ok</option></select></td><td><input type="text" id="dimMComment" value="Ok"></td></tr>
+          <tr><td>L</td><td><select id="dimLResult"><option>Ok</option></select></td><td><input type="text" id="dimLComment" value="Ok"></td></tr>
+          <tr><td>2XL</td><td><select id="dim2XLResult"><option>Ok</option></select></td><td><input type="text" id="dim2XLComment" value="Ok"></td></tr>
+          <tr><td>4XL</td><td><select id="dim4XLResult"><option>Ok</option></select></td><td><input type="text" id="dim4XLComment" value="Ok"></td></tr>
+        </table>
+
+        <div class="page-footer">Page 5</div>
+      </div>
+
+      <!-- Pages 6-8: Measurement Photos -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">Measurement Photos</div>
+        
+        <div id="images-measurements" class="image-grid-4col">
+          <!-- Measurement images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('measurements')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('measurements')">📁 Upload</button>
+
+        <div class="page-footer">Page 6-8 (Measurements)</div>
+      </div>
+
+      <!-- Page 9: Boys And Infant -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">6. BOYS AND INFANT</div>
+        
+        <table class="simple-table">
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Result</td>
+            <td class="label-cell">Actual Finding / Comments</td>
+          </tr>
+          <tr><td>12/13</td><td><select id="boys12_13Result"><option>Ok</option></select></td><td><input type="text" id="boys12_13Comment" value="Ok"></td></tr>
+          <tr><td>14/15</td><td><select id="boys14_15Result"><option>Ok</option></select></td><td><input type="text" id="boys14_15Comment" value="Ok"></td></tr>
+          <tr><td>16/17</td><td><select id="boys16_17Result"><option>Ok</option></select></td><td><input type="text" id="boys16_17Comment" value="Ok"></td></tr>
+          <tr><td>19M</td><td><select id="boys19MResult"><option>Ok</option></select></td><td><input type="text" id="boys19MComment" value="Ok"></td></tr>
+          <tr><td>23M</td><td><select id="boys23MResult"><option>Ok</option></select></td><td><input type="text" id="boys23MComment" value="Ok"></td></tr>
+        </table>
+
+        <div class="page-footer">Page 9</div>
+      </div>
+
+      <!-- Page 10: Carton Marks -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">8. Carton/shipping/shipping mark</div>
+        <div class="section-title">A. Outer / inner / Unit packing</div>
+        
+        <table class="simple-table">
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Actual Finding / Comments</td>
+          </tr>
+          <tr>
+            <td>CTN MARKS</td>
+            <td><select id="ctnMarksResult"><option>OK</option></select></td>
+          </tr>
+          <tr>
+            <td colspan="2"><input type="text" id="ctnMarksComment" value="FACTORY FOLLOWED ALL THE CTN MARKS GIVEN BY BLADE"></td>
+          </tr>
+        </table>
+
+        <div class="section-title">Carton Marks / Packing</div>
+        
+        <div id="images-carton-marks" class="image-grid-2col">
+          <!-- Carton mark images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('carton-marks')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('carton-marks')">📁 Upload</button>
+
+        <div class="page-footer">Page 10</div>
+      </div>
+
+      <!-- Page 11: Folding Method -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">5. Folding Method</div>
+        
+        <div id="images-folding" class="image-grid-2col">
+          <!-- Folding method images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('folding')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('folding')">📁 Upload</button>
+
+        <div class="page-footer">Page 11</div>
+      </div>
+
+      <!-- Page 12: Care Label -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">6. Care Label / Price ticket/ Packing</div>
+        
+        <div id="images-care-label" class="image-grid-2col">
+          <!-- Care label images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('care-label')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('care-label')">📁 Upload</button>
+
+        <div class="page-footer">Page 12</div>
+      </div>
+
+      <!-- Page 13: Sharding -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">SHARDING</div>
+        
+        <div id="images-sharding" class="image-grid-2col">
+          <!-- Sharding images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('sharding')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('sharding')">📁 Upload</button>
+
+        <div class="page-footer">Page 13</div>
+      </div>
+
+      <!-- Page 14: Price tickets & Barcode Scan -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">9. Price tickets & Barcode Scan</div>
+        
+        <div id="images-price-tickets" class="image-grid-2col">
+          <!-- Price ticket images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('price-tickets')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('price-tickets')">📁 Upload</button>
+
+        <div class="page-footer">Page 14</div>
+      </div>
+
+      <!-- Page 15: CTN Barcode Scan -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">6. CTN Barcode Scan</div>
+        
+        <div id="images-ctn-barcode" class="image-grid-2col">
+          <!-- CTN barcode images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('ctn-barcode')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('ctn-barcode')">📁 Upload</button>
+
+        <div class="page-footer">Page 15</div>
+      </div>
+
+      <!-- Page 16: GSM Images -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">GSM IMAGES</div>
+        
+        <div id="images-gsm" class="image-grid-2col">
+          <!-- GSM images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('gsm')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('gsm')">📁 Upload</button>
+
+        <table class="simple-table">
+          <tr>
+            <td class="label-cell">8. Dimension of export carton (per 4 content)</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Result</td>
+            <td class="label-cell">Actual Finding / Comments</td>
+          </tr>
+          <tr>
+            <td>L cms (W, cms H: cms)</td>
+            <td><select id="exportCartonResult"><option>OK</option></select></td>
+            <td><input type="text" id="exportCartonComment" value="Refer Packing list on Result 04/12/17"></td>
+          </tr>
+        </table>
+
+        <div class="page-footer">Page 16</div>
+      </div>
+
+      <!-- Page 17: CTN Measurements -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <div class="section-title">CTN MEASUREMENTS</div>
+        
+        <div id="images-ctn-measurements" class="image-grid-2col">
+          <!-- CTN measurement images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('ctn-measurements')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('ctn-measurements')">📁 Upload</button>
+
+        <div class="page-footer">Page 17</div>
+      </div>
+
+      <!-- Page 18: Factory Photos -->
+      <div class="report-page">
+        <div class="page-header">
+          <div class="header-left">India QC Team</div>
+        </div>
+
+        <table class="simple-table">
+          <tr>
+            <td class="label-cell">Expected Result</td>
+            <td class="label-cell">Result</td>
+            <td class="label-cell">Actual Finding / Comments</td>
+          </tr>
+          <tr>
+            <td>Maximum weight of</td>
+            <td><select id="maxWeightResult"><option>Nil</option></select></td>
+            <td><input type="text" id="maxWeightComment" value="Ok"></td>
+          </tr>
+          <tr>
+            <td>Export Cartons:</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+
+        <div class="section-title">Factory Photos</div>
+        
+        <div id="images-factory" class="image-grid-2col">
+          <!-- Factory images will be added here -->
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="cameraHandler.openCamera('factory')">📷 Add Photo</button>
+        <button class="btn btn-sm btn-secondary" onclick="cameraHandler.selectFromFile('factory')">📁 Upload</button>
+
+        <div class="important-note red-bg">
+          <strong>IMPORTANT NOTE</strong><br>
+          THE ABOVE REPORT IS SENT BY REFLECTIN INDIA QC TEAM'S FINDINGS AT THE TIME AND PLACE OF INSPECTION. THIS 
+          REPORT DOES NOT RELEASE THE BUYER OR SELLER FROM CONTRACTUAL RESPONSIBILITIES, NOR DOES IT 
+          PRESENT THE BUYERS RIGHT OF CLAIM TOWARDS THE SELLER/SUPPLIER FOR COMPENSATION FOR ANY UNDETECTED 
+          APPARENT AND/OR HIDDEN DEFECTS NOT DETECTED DURING INSPECTION OR OCCURRING ANYTIME 
+          THEREAFTER.
+        </div>
+
+        <div class="decision-buttons final-decision">
+          <button class="btn-approve" onclick="finalApprove()">Approve</button>
+          <button class="btn-reject" onclick="finalReject()">Reject</button>
+        </div>
+
+        <div class="page-footer">Page 18 (Final)</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="notification" class="notification"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay" style="display:none;">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Processing...</div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="db.js"></script>
+  <script src="camera.js"></script>
+  <script src="pdf-export.js"></script>
+  <script src="word-export.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+
+</body>
+</html>

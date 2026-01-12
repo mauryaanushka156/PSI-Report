@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Cache & Test Word Export</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #dc3545;
+            text-align: center;
+        }
+        button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #c82333;
+        }
+        .success {
+            background: #28a745;
+        }
+        .success:hover {
+            background: #1e7e34;
+        }
+        .info {
+            background: #17a2b8;
+        }
+        .info:hover {
+            background: #117a8b;
+        }
+        .note {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🔧 Clear Cache & Fix Word Export</h1>
+        <p><strong>The Word export code is correct, but your browser has cached the old version.</strong></p>
+        <p>Click the button below to clear cache and reload:</p>
+        
+        <button onclick="clearAndReload()" class="success">
+            🗑️ Clear Cache & Reload
+        </button>
+        
+        <button onclick="testExport()" class="info">
+            📝 Test Word Export
+        </button>
+        
+        <button onclick="openMainApp()">
+            🏠 Open Main App
+        </button>
+        
+        <div class="note">
+            <strong>📝 Steps:</strong>
+            <ol>
+                <li>Click "Clear Cache & Reload" button above</li>
+                <li>Then click "Open Main App"</li>
+                <li>Save a report</li>
+                <li>Click "Export Word"</li>
+                <li>Done! ✅</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Alternative: Manual Clear</h2>
+        <p><strong>Press:</strong> <code>Ctrl + Shift + Delete</code></p>
+        <p>Then select "Cached images and files" and click "Clear data"</p>
+    </div>
+
+    <script>
+        async function clearAndReload() {
+            try {
+                // Unregister service workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (let registration of registrations) {
+                        await registration.unregister();
+                        console.log('Service worker unregistered');
+                    }
+                }
+
+                // Clear caches
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                    console.log('All caches cleared');
+                }
+
+                alert('✅ Cache cleared! Reloading in 2 seconds...');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error clearing cache:', error);
+                alert('Please clear cache manually:\nPress Ctrl+Shift+Delete');
+            }
+        }
+
+        function testExport() {
+            alert('First clear the cache, then open the main app and test the export!');
+        }
+
+        function openMainApp() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

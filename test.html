@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔍 Server Test Page</h1>
+        
+        <div id="status" class="status">
+            Testing server connection...
+        </div>
+
+        <h2>Test Results:</h2>
+        <div id="results"></div>
+
+        <h2>Actions:</h2>
+        <button onclick="testConnection()">🔄 Test Connection</button>
+        <button onclick="window.location.href='/index.html'">🏠 Go to Main App</button>
+        <button onclick="testFiles()">📄 Test File Loading</button>
+
+        <h2>Server Information:</h2>
+        <div>
+            <strong>Server:</strong> Python HTTP Server<br>
+            <strong>Port:</strong> 8000<br>
+            <strong>URL:</strong> http://localhost:8000<br>
+            <strong>Status:</strong> <span id="serverStatus">Checking...</span>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, isSuccess) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + (isSuccess ? 'success' : 'error');
+        }
+
+        function addResult(message, isSuccess) {
+            const resultsDiv = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = 'status ' + (isSuccess ? 'success' : 'error');
+            div.textContent = message;
+            div.style.marginBottom = '10px';
+            resultsDiv.appendChild(div);
+        }
+
+        async function testConnection() {
+            document.getElementById('results').innerHTML = '';
+            updateStatus('Testing connection...', true);
+            
+            try {
+                const response = await fetch('/');
+                if (response.ok) {
+                    updateStatus('✅ Server is running! Status: ' + response.status, true);
+                    addResult('✅ HTTP Connection: OK (' + response.status + ')', true);
+                } else {
+                    updateStatus('⚠️ Server responded with error: ' + response.status, false);
+                    addResult('❌ HTTP Status: ' + response.status, false);
+                }
+            } catch (error) {
+                updateStatus('❌ Connection failed: ' + error.message, false);
+                addResult('❌ Error: ' + error.message, false);
+                addResult('💡 Make sure server is running: python -m http.server 8000', false);
+            }
+        }
+
+        async function testFiles() {
+            document.getElementById('results').innerHTML = '';
+            const files = [
+                'index.html',
+                'app.js',
+                'styles.css',
+                'db.js',
+                'camera.js',
+                'word-export.js',
+                'pdf-export.js',
+                'service-worker.js'
+            ];
+
+            addResult('Testing ' + files.length + ' files...', true);
+
+            for (const file of files) {
+                try {
+                    const response = await fetch('/' + file);
+                    if (response.ok) {
+                        addResult('✅ ' + file + ' - OK (' + response.status + ')', true);
+                    } else {
+                        addResult('❌ ' + file + ' - Error (' + response.status + ')', false);
+                    }
+                } catch (error) {
+                    addResult('❌ ' + file + ' - Failed to load', false);
+                }
+            }
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            testConnection();
+            document.getElementById('serverStatus').textContent = 'Checking...';
+            
+            // Update server status
+            fetch('/')
+                .then(response => {
+                    document.getElementById('serverStatus').textContent = '✅ Running (Status: ' + response.status + ')';
+                })
+                .catch(error => {
+                    document.getElementById('serverStatus').textContent = '❌ Not Running';
+                });
+        });
+    </script>
+</body>
+</html>
